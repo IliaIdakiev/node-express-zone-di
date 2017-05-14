@@ -3,15 +3,18 @@ import { Router, GET, POST, ROUTER_CONFIGURATION } from '.';
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/of';
 
+import { auth } from '../auth';
+
 let users = [{ firstName: 'Ivan', lastName: 'Ivanov' }, { firstName: 'Petar', lastName: 'Petrov' }];
 
+@auth({})
 @Router({
   path: '/api/user'
-}) 
+})
 export class UserApiRouter {
   constructor() {}
 
-  @GET() list(): Observable<any[]> {
+  @auth({}) @GET() list(): Observable<any[]> {
     return Observable.of(users);
   }
 

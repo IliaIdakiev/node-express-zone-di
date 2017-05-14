@@ -36,7 +36,7 @@ export class AppRouter {
       const expressRouter = ExpressRouter();
 
       httpMethods.forEach(method => {
-        ((config as any)[method] || []).forEach((path: string) => { (expressRouter as any)[method](`/${path}`, requestHandler(routerInstance[path])) });
+        ((config as any)[method] || []).forEach((path: string) => { (expressRouter as any)[method](`/${path}`, requestHandler(routerInstance[path].bind(routerInstance))) });
       });
 
       this.routers[config.path] = expressRouter;
