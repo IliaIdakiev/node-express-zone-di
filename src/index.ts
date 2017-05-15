@@ -6,7 +6,7 @@ import {
   configProvider,
   routerProvider
 } from './app/providers';
-import { UserApiProvider } from './routing/userApi';
+import { UserApiProvider } from './routing/user';
 import { AppRouterProvider } from './routing';
 import { App } from './app/application';
 

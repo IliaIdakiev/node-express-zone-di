@@ -8,27 +8,34 @@ export enum HTTPMethod {
   DELETE
 }
 
+export interface IRouterConfig {
+  prefix?: string,
+  path?: string
+}
+
 export interface IRouteConfig {
   path?: string,
-  get?: string[],
-  post?: string[]
+  base?: boolean
 }
 
 export function methodDecoratorFactory(method: HTTPMethod) {
   const methodStr: string = HTTPMethod[method].toLocaleLowerCase();
-  return function() {
+  return function(config?: IRouteConfig) {
     return function(target: any, key?: string, propertyDescriptor?: PropertyDescriptor) {
-      const config: IRouteConfig = getRouteConfig(target.constructor) || { [methodStr]: [] };
-      (config as any)[methodStr] = ((config as any)[methodStr] || []).concat(key);
-      setRouteConfig(target.constructor, config);
+      const routerConfig: IRouterConfig = getRouteConfig(target.constructor) || { [methodStr]: [] };
+      if (config && config.base) config.path = '';
+      (routerConfig as any)[methodStr] = ((routerConfig as any)[methodStr] || [])
+        .concat(config && typeof config.path === "string" ? { path: config.path, key }: key);
+      setRouteConfig(target.constructor, routerConfig);
       return propertyDescriptor;
     }
   }
 }
 
-export function Router(config: IRouteConfig) {
+export function Router(config: IRouterConfig) {
   return function(target: any, key?: string, propertyDescriptor?: PropertyDescriptor) {
-    let existingConfig: IRouteConfig = getRouteConfig(target);
+    config.prefix = config.prefix || target.name;
+    let existingConfig: IRouterConfig = getRouteConfig(target);
     config = Object.assign({}, config, existingConfig);
     Reflect.defineMetadata(ROUTER_CONFIG_METADATA_KEY, config, target);
     return target;
@@ -41,7 +48,7 @@ export const PATCH  = methodDecoratorFactory(HTTPMethod.PATCH);
 export const PUT    = methodDecoratorFactory(HTTPMethod.PUT);
 export const DELETE = methodDecoratorFactory(HTTPMethod.DELETE);
 
-export function getRouteConfig(target: any): IRouteConfig {
+export function getRouteConfig(target: any): IRouterConfig {
   return Reflect.getMetadata(ROUTER_CONFIG_METADATA_KEY, target);
 }
 
