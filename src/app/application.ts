@@ -2,7 +2,7 @@ import { Application } from 'express';
 import * as bodyParser from 'body-parser';
 import { Injectable, Inject, forwardRef } from 'injection-js';
 import { ExpressApp, Config } from './providers';
-import { ROUTER_CONFIGURATION, getRouteConfig } from '../routing';
+import { ROUTER_CONFIGURATION, getRouterConfig } from '../routing';
 import { AppRouter } from '../routing';
 
 @Injectable()

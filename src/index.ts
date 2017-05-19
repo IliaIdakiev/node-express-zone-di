@@ -10,27 +10,6 @@ import { UserApiProvider } from './routing/user';
 import { AppRouterProvider } from './routing';
 import { App } from './app/application';
 
-// import { DECOR, PARAMDECOR, PROPDECOR } from './routing';
-
-
-// @DECOR({
-//   selector: 'alabala',
-//   test: 'hohoho'
-// }) class Something {
-
-// }
-
-// class Something {
-//   // @PROPDECOR() prop: any;
-//   constructor(@PARAMDECOR() test: any) {
-//     console.log(test);
-//   }
-// }
-
-// var b = new Something(12312);
-
-// return;
-
 const injector = ReflectiveInjector.resolveAndCreate([
   expressProvider, 
   configProvider, 
