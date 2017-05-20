@@ -26,7 +26,7 @@ let users = [
 export class User {
   constructor() {}
 
-  @auth({})
+  @auth()
   @GET()
   list(): Observable<any[]> {
     return Observable.of(users);

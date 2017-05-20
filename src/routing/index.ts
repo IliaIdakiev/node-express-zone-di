@@ -11,7 +11,7 @@ import {
   ParamsTypes,
   ParamConfigData
 } from './decorators';
-import { getAuthConfig, IAuthConfig, AUTH_FUNC } from '../auth';
+import { getAuthConfig, IAuthConfig } from '../auth';
 import 'rxjs/add/operator/reduce';
 
 export * from './decorators';
@@ -57,8 +57,7 @@ export class AppRouter {
   routers: { [path: string]: any } = {};
   constructor(
     @Inject(ROUTER_CONFIGURATION) routers: any[], 
-    @Inject(forwardRef(() => ExpressRouter)) ExpressRouter: any, 
-    @Inject(AUTH_FUNC) authFn: any
+    @Inject(forwardRef(() => ExpressRouter)) ExpressRouter: any
   ) {
     routers.forEach((Router: any) => {
       const config: IRouterConfig = getRouterConfig(Router);
@@ -86,15 +85,25 @@ export class AppRouter {
 
           let urlParamString = metaparam.params.filter(param => param.type === ParamsTypes.param).map(param => param.key).join('/:');
           if (urlParamString) urlParamString = '/:' + urlParamString;
-
-          if (authConfig && (authConfig.forMethod as any)[path]) {
+          let methodAuth: any[];
+          if (authConfig && (methodAuth = (authConfig.forMethod as any)[path])) {
             middleware.push((req: Request, res: Response, next: Function) => {
-              try {
-                if(authFn(Zone.current.get('user'))) return next();
-                res.status(401).end();
-              } catch(e) {
-                res.status(401).end();
+              // TODO handle methodAuth array properly 
+              const authConf = methodAuth[0];
+              if (authConf !== null) {
+                let result: boolean = true;
+                for (let key in authConf) {
+                  if (authConf[key] !== Zone.current.get(key)) {
+                    result = false;
+                    break;
+                  }
+                }
+                if (result) return next();
+              } else {
+                const name = Zone.current.name;
+                if (name !== 'Unauthenticated') return next();
               }
+              res.status(401).end();
             });
           }
 

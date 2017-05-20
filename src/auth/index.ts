@@ -11,10 +11,9 @@ export interface IAuthConfig {
   forMethod: { [name: string]: any[] }
 };
 
-export const AUTH_FUNC = new OpaqueToken('Auth Function');
 export const AUTH = new OpaqueToken('Auth');
 
-export function auth(data: any) {
+export function auth(data: any = null) {
   return function (target: any, key?: string, propertyDescriptor?: PropertyDescriptor) {
     let config;
     const getConfig = (target: any) => getAuthConfig(target) || { forClass: [], forMethod: {}};
@@ -24,7 +23,7 @@ export function auth(data: any) {
       setAuthConfig(target, config);
     } else {
       config = getConfig(target.constructor);
-      (config.forMethod as any)[key] = (config.forMethod[key] || []).push(data);
+      (config.forMethod as any)[key] = (config.forMethod[key] || []).concat(data);
       setAuthConfig(target.constructor, config);
     }
   }
@@ -80,11 +79,16 @@ export class JWTAuthenticator {
       const user = users[decoded.id];
       Zone.current.fork({
         name: 'user-' + user.id,
-        properties: { user }
+        properties: user
       }).run(() => next());
     });
   }
 }
+
+/* * 
+ * TODO: 
+ * Create a cookie auth provider and service
+ * */
 
 export const JWTAuthProvider = {
   provide: AUTH,

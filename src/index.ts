@@ -10,14 +10,7 @@ import {
 import { UserApiProvider } from './routing/user';
 import { AppRouterProvider } from './routing';
 import { App } from './app/application';
-import { AUTH_FUNC, JWTAuthProvider } from './auth';
-
-const authFunctionProvider = {
-  provide: AUTH_FUNC,
-  useValue: ({ firstName, lastName, role }: { firstName: string, lastName: string, role: number }) => {
-    return role === 0;
-  }
-}
+import { JWTAuthProvider } from './auth';
 
 // const authParserProvider = {
 //   provide: AUTH_PARSER,
@@ -31,7 +24,6 @@ const injector = ReflectiveInjector.resolveAndCreate([
   routerProvider,
   UserApiProvider,
   AppRouterProvider,
-  authFunctionProvider,
   JWTAuthProvider
 ]);
 
