@@ -44,7 +44,6 @@ export function paramDecoratorFactory(type: ParamsTypes) {
     return function (target: any, key: string, index: number) {
       const params = extractParams(target[key]);
       const meta = getParamConfig(target.constructor, key) || { params: [] };
-      // meta.params[index] = Object.assign({}, { key: params[index], type }, meta.params[index]);
       meta.params[index] = { key: params[index].replace(/\s/, ''), type };
       setParamConfig(target.constructor, meta, key);
     };

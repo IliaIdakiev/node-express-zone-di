@@ -1,9 +1,10 @@
 import { Provider } from 'injection-js';
 import { Router, GET, POST, ROUTER_CONFIGURATION, param, body } from '.';
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
 import { auth } from '../auth';
+
 let idx = 1;
 let users = [
   { 
@@ -25,16 +26,19 @@ let users = [
 export class User {
   constructor() {}
 
+  @auth({})
   @GET()
   list(): Observable<any[]> {
     return Observable.of(users);
   }
 
-  /* * 
+ /* * 
+  *
   * optionalParameters: true - if we have list(id) with url /list/:id this will also add /list into the routes
   * 
   * TODO:
   * @optional decorator handling for arguments that allow the method list(@optional id) to be -> /lust/:id?
+  *
   * */
 
   @GET({ 

@@ -11,6 +11,7 @@ import {
   ParamsTypes,
   ParamConfigData
 } from './decorators';
+import { getAuthConfig, IAuthConfig, AUTH_FUNC } from '../auth';
 import 'rxjs/add/operator/reduce';
 
 export * from './decorators';
@@ -36,7 +37,7 @@ const dataExtractionMap: { [key: number]: (req: Request, key: string, paramtype:
   [ParamsTypes.param]: (req: Request, key: string, paramtype: Function) => paramtype(req.params[key]) || null,
   [ParamsTypes.query]: (req: Request, key: string, paramtype: Function) => paramtype(req.query[key]) || null,
   [ParamsTypes.body]: (req: Request, key: string, paramtype: Function) => paramtype(req.body && req.body[key]) || null,
-} as { [type: number]: any};
+} as { [type: number]: any };
 
 
 
@@ -54,14 +55,20 @@ const requestHandlerFactory = (httpType: string, hanlder: any, paramMetadata: Pa
 @Injectable()
 export class AppRouter {
   routers: { [path: string]: any } = {};
-  constructor( @Inject(ROUTER_CONFIGURATION) routers: any[], @Inject(forwardRef(() => ExpressRouter)) ExpressRouter: any) {
+  constructor(
+    @Inject(ROUTER_CONFIGURATION) routers: any[], 
+    @Inject(forwardRef(() => ExpressRouter)) ExpressRouter: any, 
+    @Inject(AUTH_FUNC) authFn: any
+  ) {
     routers.forEach((Router: any) => {
       const config: IRouterConfig = getRouterConfig(Router);
+      const authConfig: IAuthConfig = getAuthConfig(Router);
       const routerInstance = new Router();
       const expressRouter = ExpressRouter();
 
       httpMethods.forEach(method => {
         ((config as any)[method] || []).forEach((item: string) => {
+          let middleware = [];
           const { path, key, optionalParameters } = (typeof item === "object") ? item : { path: item, key: item, optionalParameters: false };
 
           /* *
@@ -70,6 +77,7 @@ export class AppRouter {
            *  'design:type'
            *  'design:returntype'
            *  'design:paramtypes'
+           * 
            * */
 
           const paramtypes: string[] = Reflect.getOwnMetadata('design:paramtypes', Router.prototype, key);
@@ -79,10 +87,21 @@ export class AppRouter {
           let urlParamString = metaparam.params.filter(param => param.type === ParamsTypes.param).map(param => param.key).join('/:');
           if (urlParamString) urlParamString = '/:' + urlParamString;
 
-          (expressRouter as any)[method](`/${path}${urlParamString}`.replace('//', '/'),
+          if (authConfig && (authConfig.forMethod as any)[path]) {
+            middleware.push((req: Request, res: Response, next: Function) => {
+              try {
+                if(authFn(Zone.current.get('user'))) return next();
+                res.status(401).end();
+              } catch(e) {
+                res.status(401).end();
+              }
+            });
+          }
+
+          (expressRouter as any)[method](`/${path}${urlParamString}`.replace('//', '/'), ...middleware,
             requestHandlerFactory(method, routerInstance[key].bind(routerInstance), metaparam.params, paramtypes, returntype))
 
-          if (optionalParameters) (expressRouter as any)[method](`/${path}`,
+          if (optionalParameters) (expressRouter as any)[method](`/${path}`, ...middleware,
             requestHandlerFactory(method, routerInstance[key].bind(routerInstance), metaparam.params, paramtypes, returntype))
         });
       });
