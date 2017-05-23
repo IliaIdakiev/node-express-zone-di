@@ -1,5 +1,5 @@
 import { Request, Response, Router as ERouter, Application } from 'express';
-import { OpaqueToken, Inject, Injectable, forwardRef } from 'injection-js';
+import { OpaqueToken, Inject, Injectable, forwardRef, Injector } from 'injection-js';
 import { ExpressRouter } from '../app/providers';
 import { Observable } from 'rxjs/Observable';
 import {
@@ -57,12 +57,14 @@ export class AppRouter {
   routers: { [path: string]: any } = {};
   constructor(
     @Inject(ROUTER_CONFIGURATION) routers: any[], 
-    @Inject(forwardRef(() => ExpressRouter)) ExpressRouter: any
+    @Inject(forwardRef(() => ExpressRouter)) ExpressRouter: any,
+    injector: Injector
   ) {
     routers.forEach((Router: any) => {
       const config: IRouterConfig = getRouterConfig(Router);
       const authConfig: IAuthConfig = getAuthConfig(Router);
-      const routerInstance = new Router();
+      const paramtypes: any[] = Reflect.getOwnMetadata('design:paramtypes', Router);
+      const routerInstance = new Router(...paramtypes.map(type => injector.get(type)));
       const expressRouter = ExpressRouter();
 
       httpMethods.forEach(method => {

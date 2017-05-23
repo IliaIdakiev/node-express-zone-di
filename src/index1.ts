@@ -67,15 +67,6 @@ const auth = (req: Request, res: Response, next: Function) => {
   next();
 };
 
-// @Router('/') class r {
-//   constructor(private userService)
-  
-//   @auth(UserRole.Admin)
-//   @get('url') user() {
-
-//   } 
-// }
-
 app.get('/', (req, res) => {
   res.send('Hello world').end();
 });

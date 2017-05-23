@@ -1,5 +1,6 @@
-import { Provider } from 'injection-js';
+import { Provider, Injectable } from 'injection-js';
 import { Router, GET, POST, ROUTER_CONFIGURATION, param, body } from '.';
+import { UserModel } from '../models/user.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
@@ -19,17 +20,22 @@ let users = [
   }
 ];
 
+
 @Router({
   prefix: '/api',
   path: '/user'
 })
 export class User {
-  constructor() {}
+  constructor(private userModel: UserModel) {
 
-  @auth()
+  }
+
+  @auth({
+    role: 0
+  })
   @GET()
   list(): Observable<any[]> {
-    return Observable.of(users);
+    return Observable.of(this.userModel.users);
   }
 
  /* * 
@@ -46,7 +52,7 @@ export class User {
     optionalParameters: true
   })
   getUser(@param() id: number, @param() role: string): Observable<any> {
-    if (id) return Observable.of(users.filter(user => user.id === id));
+    if (id) return Observable.of(this.userModel.users.filter(user => user.id === id));
     return Observable.of([]);
   }
 
@@ -57,8 +63,8 @@ export class User {
     base: true
   })
   setUser(@body() firstName: string, @body() lastName: string): Observable<any[]> {
-    users = users.concat({ id: ++idx, firstName, lastName });
-    return Observable.of(users);
+    this.userModel.users = this.userModel.users.concat({ id: ++idx, firstName, lastName });
+    return Observable.of(this.userModel.users);
   }
 
 }

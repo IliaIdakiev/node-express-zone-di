@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import 'zone.js';
 import { ReflectiveInjector } from 'injection-js';
-import { 
-  expressProvider, 
+import {
+  expressProvider,
   applicationProvider,
   configProvider,
   routerProvider
@@ -11,20 +11,17 @@ import { UserApiProvider } from './routing/user';
 import { AppRouterProvider } from './routing';
 import { App } from './app/application';
 import { JWTAuthProvider } from './auth';
-
-// const authParserProvider = {
-//   provide: AUTH_PARSER,
-//   useValue: ()
-// }
+import { UserModel } from './models/user.model';
 
 const injector = ReflectiveInjector.resolveAndCreate([
-  expressProvider, 
-  configProvider, 
+  expressProvider,
+  configProvider,
   applicationProvider,
   routerProvider,
   UserApiProvider,
   AppRouterProvider,
-  JWTAuthProvider
+  JWTAuthProvider,
+  { provide: UserModel, useClass: UserModel }
 ]);
 
 const app = injector.get(App);
