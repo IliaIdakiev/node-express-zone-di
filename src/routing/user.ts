@@ -8,14 +8,14 @@ import { auth } from '../auth';
 
 let idx = 1;
 let users = [
-  { 
+  {
     id: 0,
-    firstName: 'Ivan', 
-    lastName: 'Ivanov' 
-  }, 
-  { 
+    firstName: 'Ivan',
+    lastName: 'Ivanov'
+  },
+  {
     id: 1,
-    firstName: 'Petar', 
+    firstName: 'Petar',
     lastName: 'Petrov'
   }
 ];
@@ -27,7 +27,7 @@ let users = [
 })
 export class User {
 
-  constructor(private userModel: UserModel) {}
+  constructor(private userModel: UserModel) { }
 
   @auth({
     role: 0
@@ -38,20 +38,20 @@ export class User {
     return this.userModel.get();
   }
 
- /* * 
-  *
-  * optionalParameters: true - if we have list(id) with url /list/:id this will also add /list into the routes
-  * 
-  * TODO:
-  * @optional decorator handling for arguments that allow the method list(@optional id) to be -> /lust/:id?
-  *
-  * */
+  /* * 
+   *
+   * optionalParameters: true - if we have list(id) with url /list/:id this will also add /list into the routes
+   * 
+   * TODO:
+   * @optional decorator handling for arguments that allow the method list(@optional id) to be -> /lust/:id?
+   *
+   * */
 
   @GET({
     base: true,
     optionalParameters: true
   })
-  getUser(@param() id: number, @param() role: string): Observable<any> {
+  getUser( @param() id: number, @param() role: string): Observable<any> {
     // if (id) return Observable.of([].filter(user => user.id === id));
     // return Observable.of([]);
     return this.userModel.get(id);
@@ -63,7 +63,7 @@ export class User {
   @POST({
     base: true
   })
-  setUser(@body() firstName: string, @body() lastName: string, @body() email:string): Observable<any[]> {
+  setUser( @body() firstName: string, @body() lastName: string, @body() email: string): Observable<any[]> {
     // this.userModel.users = this.userModel.users.concat({ id: ++idx, firstName, lastName });
     //return Observable.of([]);
     return this.userModel.add({ firstName, lastName, email });

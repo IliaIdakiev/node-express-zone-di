@@ -1,6 +1,6 @@
 import { Model } from './decorators';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of'; 
+import 'rxjs/add/observable/of';
 
 export interface IUser {
   id?: number;
@@ -9,7 +9,7 @@ export interface IUser {
   email: string;
 }
 
-@Model({ 
+@Model({
   tableName: 'users'
 })
 export class UserModel {

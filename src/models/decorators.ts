@@ -29,7 +29,7 @@ export function Model({ tableName }: { tableName: string }) {
       },
       onInvoke: (parentZoneDelegate: ZoneDelegate, currentZone: Zone, targetZone: Zone, delegate: Function, applyThis: any, applyArgs: any[], source: string) => {
         /* Here we are simulation a database call */
-        const saveCallback = function(value: any) { 
+        const saveCallback = function (value: any) {
           const targetUsers = applyThis['users'];
 
           if (users.length < targetUsers.length) {
@@ -37,7 +37,7 @@ export function Model({ tableName }: { tableName: string }) {
             const match = users.filter(u => u.email === newUser.email);
             if (match.length !== 0) return Observable.throw('Email already in use!');
             newUser.id = ++idx;
-          } 
+          }
 
           users = targetUsers;
           return Observable.of(value);
@@ -49,9 +49,9 @@ export function Model({ tableName }: { tableName: string }) {
         if (result instanceof Observable) {
           result = (result as Observable<any>).mergeMap(saveCallback);
         } else if (result instanceof Promise) {
-
+          // TODO
         } else {
-
+          // TODO
         }
 
         return result;

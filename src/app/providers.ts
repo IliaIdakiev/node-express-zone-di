@@ -3,9 +3,9 @@ import * as fs from 'fs';
 import { OpaqueToken, Provider } from 'injection-js';
 import { App } from './application';
 
-const ExpressApp = new OpaqueToken('Express');
-const Config = new OpaqueToken('Config');
-const ExpressRouter = new OpaqueToken('ExpressRouter');
+export const ExpressApp = new OpaqueToken('Express');
+export const Config = new OpaqueToken('Config');
+export const ExpressRouter = new OpaqueToken('ExpressRouter');
 
 const applicationProvider: Provider = {
   provide: App,
@@ -33,4 +33,4 @@ const configProvider: Provider = {
   }
 }
 
-export { ExpressApp, applicationProvider, expressProvider, configProvider, Config, ExpressRouter, routerProvider };
+export { applicationProvider, expressProvider, configProvider, routerProvider };

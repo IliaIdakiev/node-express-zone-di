@@ -16,7 +16,7 @@ export const AUTH = new OpaqueToken('Auth');
 export function auth(data: any = null) {
   return function (target: any, key?: string, propertyDescriptor?: PropertyDescriptor) {
     let config;
-    const getConfig = (target: any) => getAuthConfig(target) || { forClass: [], forMethod: {}};
+    const getConfig = (target: any) => getAuthConfig(target) || { forClass: [], forMethod: {} };
     if (!propertyDescriptor) {
       config = getConfig(target);
       config.forClass.push(data);

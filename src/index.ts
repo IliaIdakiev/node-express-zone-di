@@ -9,9 +9,9 @@ import {
 } from './app/providers';
 import { UserApiProvider } from './routing/user';
 import { AppRouterProvider } from './routing';
-import { App } from './app/application';
 import { JWTAuthProvider } from './auth';
 import { modelProviders } from './models';
+import { App } from './app/application';
 
 const injector = ReflectiveInjector.resolveAndCreate([
   expressProvider,

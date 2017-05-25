@@ -46,7 +46,7 @@ const requestHandlerFactory = (httpType: string, hanlder: any, paramMetadata: Pa
       const paramMeta = paramMetadata[index];
       return dataExtractionMap[paramMeta.type](req, paramMeta.key, paramtype);
     });
-    responseHandler(hanlder, data, res);    
+    responseHandler(hanlder, data, res);
   }
 }
 
@@ -54,7 +54,7 @@ const requestHandlerFactory = (httpType: string, hanlder: any, paramMetadata: Pa
 export class AppRouter {
   routers: { [path: string]: any } = {};
   constructor(
-    @Inject(ROUTER_CONFIGURATION) routers: any[], 
+    @Inject(ROUTER_CONFIGURATION) routers: any[],
     @Inject(forwardRef(() => ExpressRouter)) ExpressRouter: any,
     injector: Injector
   ) {

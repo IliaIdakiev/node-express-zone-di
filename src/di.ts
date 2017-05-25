@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 
 function Injectable() {
-  return function(target: any, key?: string, descriptor?: PropertyDecorator): any {
+  return function (target: any, key?: string, descriptor?: PropertyDecorator): any {
     return target;
   }
 }
@@ -13,12 +13,12 @@ class ReflectiveInjector {
 
   get(token: any) {
     let deps = Reflect.getMetadata('design:paramtypes', token), depObjects = [];
-    if(deps && deps.length > 0) {
+    if (deps && deps.length > 0) {
       depObjects = deps.map((a: any) => this.get(a));
     }
     const ctorIndex = this.providers.indexOf(token);
     return new this.providers[ctorIndex](...depObjects);
-  } 
+  }
 }
 
 class Http {
@@ -38,5 +38,5 @@ class Service {
   }
 }
 
-var injector = new ReflectiveInjector([ Http, Service ]);
+var injector = new ReflectiveInjector([Http, Service]);
 const service = injector.get(Service);

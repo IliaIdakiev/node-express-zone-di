@@ -33,7 +33,7 @@ export interface IParamConfig {
 }
 
 const ParamRegexFactory = (methodName: string): RegExp => new RegExp(`${methodName}\\(\\s*([^)]+?)\\s*\\)`, 'g');
-const extractParams = (func: Function): string[] => { 
+const extractParams = (func: Function): string[] => {
   const matches: any[] = ParamRegexFactory(func.name).exec(func.toString()) || [];
   const match: string = matches[1];
   return match && match.split(',') || [];
