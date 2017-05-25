@@ -1,17 +1,27 @@
-import { Injectable } from 'injection-js';
+import { Model } from './decorators';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of'; 
 
-@Injectable()
+export interface IUser {
+  id?: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+@Model({ 
+  tableName: 'users'
+})
 export class UserModel {
-  users = [
-    {
-      id: 0,
-      firstName: 'Ivan', 
-      lastName: 'Ivanov' 
-    }, 
-    { 
-      id: 1,
-      firstName: 'Petar', 
-      lastName: 'Petrov'
-    }
-  ];
+
+  private users: IUser[];
+
+  get(id?: number): Observable<IUser[]> {
+    return id ? Observable.of(this.users.filter(u => u.id === id)) : Observable.of(this.users);
+  }
+
+  add(newUser: IUser): Observable<IUser[]> {
+    this.users = this.users.concat(newUser)
+    return Observable.of(this.users);
+  }
 }

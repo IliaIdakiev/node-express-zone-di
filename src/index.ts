@@ -11,7 +11,7 @@ import { UserApiProvider } from './routing/user';
 import { AppRouterProvider } from './routing';
 import { App } from './app/application';
 import { JWTAuthProvider } from './auth';
-import { UserModel } from './models/user.model';
+import { modelProviders } from './models';
 
 const injector = ReflectiveInjector.resolveAndCreate([
   expressProvider,
@@ -21,7 +21,7 @@ const injector = ReflectiveInjector.resolveAndCreate([
   UserApiProvider,
   AppRouterProvider,
   JWTAuthProvider,
-  { provide: UserModel, useClass: UserModel }
+  ...modelProviders
 ]);
 
 const app = injector.get(App);

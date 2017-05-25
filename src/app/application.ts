@@ -26,6 +26,8 @@ export class App {
       res.send('hi!').end()
     });
 
-    this.expressApp.listen(this.config.port, () => console.info('Server listening on ' + this.config.port));
+    Zone.current.fork({ name: 'AppName' }).run(() => {
+      this.expressApp.listen(this.config.port, () => console.info('Server listening on ' + this.config.port));
+    });
   }
 }

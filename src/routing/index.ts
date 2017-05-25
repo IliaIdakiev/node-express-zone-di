@@ -1,7 +1,7 @@
 import { Request, Response, Router as ERouter, Application } from 'express';
 import { OpaqueToken, Inject, Injectable, forwardRef, Injector } from 'injection-js';
+import { getAuthConfig, IAuthConfig } from '../auth';
 import { ExpressRouter } from '../app/providers';
-import { Observable } from 'rxjs/Observable';
 import {
   IRouterConfig,
   IParamConfig,
@@ -11,14 +11,14 @@ import {
   ParamsTypes,
   ParamConfigData
 } from './decorators';
-import { getAuthConfig, IAuthConfig } from '../auth';
+
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/reduce';
 
-export * from './decorators';
+export * from './decorators'
 export const ROUTER_CONFIGURATION = new OpaqueToken('ROUTER_CONFIGURATION');
 
 const httpMethods = ['get', 'post', 'patch', 'delete', 'put'];
-
 const sendResponse = (res: Response, data: any, code: number = 200) => res.status(code).send(data).end();
 
 const responseHandlerMap: { [key: string]: (handler: Function, data: any, res: Response) => void } = {
@@ -38,8 +38,6 @@ const dataExtractionMap: { [key: number]: (req: Request, key: string, paramtype:
   [ParamsTypes.query]: (req: Request, key: string, paramtype: Function) => paramtype(req.query[key]) || null,
   [ParamsTypes.body]: (req: Request, key: string, paramtype: Function) => paramtype(req.body && req.body[key]) || null,
 } as { [type: number]: any };
-
-
 
 const requestHandlerFactory = (httpType: string, hanlder: any, paramMetadata: ParamConfigData[], paramtypes: any[], returntype: string) => {
   const responseHandler = responseHandlerMap[returntype];

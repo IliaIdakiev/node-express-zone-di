@@ -26,16 +26,16 @@ let users = [
   path: '/user'
 })
 export class User {
-  constructor(private userModel: UserModel) {
 
-  }
+  constructor(private userModel: UserModel) {}
 
   @auth({
     role: 0
   })
   @GET()
   list(): Observable<any[]> {
-    return Observable.of(this.userModel.users);
+    // return Observable.of([]);//this.userModel.users);
+    return this.userModel.get();
   }
 
  /* * 
@@ -47,24 +47,26 @@ export class User {
   *
   * */
 
-  @GET({ 
+  @GET({
     base: true,
     optionalParameters: true
   })
   getUser(@param() id: number, @param() role: string): Observable<any> {
-    if (id) return Observable.of(this.userModel.users.filter(user => user.id === id));
-    return Observable.of([]);
+    // if (id) return Observable.of([].filter(user => user.id === id));
+    // return Observable.of([]);
+    return this.userModel.get(id);
   }
 
   /* *
    * 
    * */
-  @POST({ 
+  @POST({
     base: true
   })
-  setUser(@body() firstName: string, @body() lastName: string): Observable<any[]> {
-    this.userModel.users = this.userModel.users.concat({ id: ++idx, firstName, lastName });
-    return Observable.of(this.userModel.users);
+  setUser(@body() firstName: string, @body() lastName: string, @body() email:string): Observable<any[]> {
+    // this.userModel.users = this.userModel.users.concat({ id: ++idx, firstName, lastName });
+    //return Observable.of([]);
+    return this.userModel.add({ firstName, lastName, email });
   }
 
 }
