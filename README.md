@@ -26,4 +26,5 @@ Dependency Injection is done via [injection-js](https://github.com/mgechev/injec
 `yarn start`
 
 Use [postman](https://www.getpostman.com/) to make API calls. <br/>
-For authenticated requests set x-access-token property inside the header with this token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNDkyOTMxMzk5fQ.9oR56HgCeMFaLlGFMQ-SICDC8ZWaN31UvVDAJQnzLno` as value.
+For authenticated requests set x-access-token property inside the header with this token: <br/><br/>
+`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNDkyOTMxMzk5fQ.9oR56HgCeMFaLlGFMQ-SICDC8ZWaN31UvVDAJQnzLno` <br/><br/> as value.
