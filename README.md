@@ -5,7 +5,7 @@ This project was started as an example for my [Reflective Injection](https://git
 
 Dependency Injection is done via [injection-js](https://github.com/mgechev/injection-js)
 ### Contributors are welcome.
-
+---
 ### TODO
 * Choose a name for the project.
 * Imporve API.
@@ -16,3 +16,14 @@ Dependency Injection is done via [injection-js](https://github.com/mgechev/injec
 * Extract framework files to separate module.
 * Imporve README.
 * A bunch of other things
+
+---
+
+### Setup
+`yarn` or `yarn install`
+
+### Starting server
+`yarn start`
+
+Use [postman](https://www.getpostman.com/) to make API calls. <br/>
+For authenticated requests set x-access-token property inside the header with this token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNDkyOTMxMzk5fQ.9oR56HgCeMFaLlGFMQ-SICDC8ZWaN31UvVDAJQnzLno` as value.
